@@ -2,6 +2,7 @@ load("@io_bazel_stardoc//:version.bzl", "version")
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
 
 package(
+    default_applicable_licenses = ["//:license"],
     default_visibility = ["//visibility:private"],
 )
 
@@ -14,7 +15,7 @@ genrule(
     name = "distro_workspace",
     srcs = ["//:WORKSPACE"],
     outs = ["WORKSPACE"],
-    cmd = "sed -e '/### INTERNAL ONLY/,$$d' $(location //:WORKSPACE) >$@",
+    cmd = "sed -e '/### INTERNAL ONLY/,/### END INTERNAL ONLY/d' $(location //:WORKSPACE) >$@",
 )
 
 pkg_tar(
