@@ -7,7 +7,7 @@ third_party {
     type: GIT
     value: "https://github.com/bazelbuild/stardoc"
   }
-  version: "0.5.3"
-  last_upgrade_date { year: 2022 month: 11 day: 8 }
+  version: "0.6.2"
+  last_upgrade_date { year: 2023 month: 11 day: 8 }
   license_type: NOTICE
 }
