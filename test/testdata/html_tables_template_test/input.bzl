@@ -42,7 +42,7 @@ example_aspect = aspect(
     doc = "Small example of aspect using a markdown template.",
     attr_aspects = ["deps", "attr_aspect"],
     attrs = {
-        "first": attr.int(mandatory = True),
+        "first": attr.label(mandatory = True, allow_single_file = True),
         "second": attr.string(doc = "This is the second attribute."),
     },
 )
