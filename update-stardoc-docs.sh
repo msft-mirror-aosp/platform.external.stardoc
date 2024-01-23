@@ -19,11 +19,8 @@
 
 set -eu
 
-# Allow users to override the bazel command with e.g. bazelisk.
-: "${BAZEL:=bazel}"
-
 echo "** Generating Stardoc documentation..."
-${BAZEL} build //stardoc:stardoc_doc.md
+bazel build //stardoc:stardoc_doc.md
 
 echo "** Copying result to docs/stardoc_rule.md ..."
 cp bazel-bin/stardoc/stardoc_doc.md docs/stardoc_rule.md
