@@ -10,21 +10,11 @@ MyFooInfo = provider(
 # buildifier: disable=unsorted-dict-items
 MyVeryDocumentedInfo = provider(
     doc = """
-    A provider with some really neat documentation.
-
-    Look on my works, ye mighty, and despair!
-    """,
+A provider with some really neat documentation.
+Look on my works, ye mighty, and despair!
+""",
     fields = {
-        "favorite_food": """
-            A string representing my favorite food
-
-            Expected to be delicious.
-        """,
+        "favorite_food": "A string representing my favorite food",
         "favorite_color": "A string representing my favorite color",
     },
 )
-
-named_providers_are_hashable = {
-    MyFooInfo: "MyFooInfo is hashable",
-    MyVeryDocumentedInfo: "So is MyVeryDocumentedInfo",
-}

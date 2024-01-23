@@ -217,7 +217,7 @@ A unique name for this target.
 <td><code>first</code></td>
 <td>
 
-Integer; required
+<a href="https://bazel.build/concepts/labels">Label</a>; required
 
 </td>
 </tr>
