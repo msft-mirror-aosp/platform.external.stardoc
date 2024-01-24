@@ -1,45 +1,29 @@
-"""Input file to test angle bracket bug (https://github.com/bazelbuild/skydoc/issues/186)
+"""Input file to test <angle bracket bugs>
 
-See https://github.com/bazelbuild/skydoc/issues/186,
-https://github.com/bazelbuild/stardoc/issues/132,
-and https://github.com/bazelbuild/stardoc/issues/137.
+See https://github.com/bazelbuild/skydoc/issues/186
+and https://github.com/bazelbuild/stardoc/issues/132"""
 
-<b>HTML formatting</b> can be used in docstrings, just as in regular Markdown.
-Literal angle brackets can be obtained by escaping them with a backslash, where
-the backslash itself must be escaped for use in a Starlark docstring
-(`\\\\<` becomes \\<), or by using HTML entities (`&lt;` becomes &lt;).
-Angle brackets are also preserved in inline code blocks (`#include <vector>`).
-"""
+def bracket_function(param = "<default>"):
+    """Dummy docstring with <brackets>.
 
-def bracket_function(param = "<default>", md_string = "foo `1<<10` bar"):
-    """Dummy docstring with \\<brackets>.
-
-    This rule runs checks on `<angle brackets>`.
-
-    Sometimes, we have such things on their own, but they may
-    also appear in code blocks, like
-
-    ```starlark
-    foo = "<thing>"
-    ```
+    This rule runs checks on <angle brackets>.
 
     Args:
-        param: an arg with **formatted** docstring, `<default>` by default.
-        md_string: A markdown string.
+        param: an arg with **formatted** docstring, <default> by default.
 
     Returns:
-        some \\<angled> brackets
+        some <angled> brackets
 
     Deprecated:
-        deprecated for \\<reasons> as well as `<reasons>`.
+        deprecated for <reasons>
     """
-    return param or md_string
+    return param
 
 # buildifier: disable=unsorted-dict-items
 bracketuse = provider(
-    doc = "Information with \\<brackets>",
+    doc = "Information with <brackets>",
     fields = {
-        "foo": "A string representing \\<foo>",
+        "foo": "A string representing <foo>",
         "bar": "A string representing bar",
         "baz": "A string representing baz",
     },
@@ -51,19 +35,11 @@ def _rule_impl(ctx):
 
 my_anglebrac = rule(
     implementation = _rule_impl,
-    doc = "Rule with \\<brackets>",
+    doc = "Rule with <brackets>",
     attrs = {
         "useless": attr.string(
-            doc = "Args with some tags: \\<tag1>, \\<tag2>",
-            default = "Find \\<brackets>",
-        ),
-        "also_useless": attr.string(
-            doc = """Args with some formatted tags: `<tag>` and
-```xml
-<tag2>x</tag2>
-```
-""",
-            default = "1<<5",
+            doc = "Args with some tags: <tag1>, <tag2>",
+            default = "Find <brackets>",
         ),
     },
 )
@@ -74,18 +50,11 @@ def _bracket_aspect_impl(ctx):
 
 bracket_aspect = aspect(
     implementation = _bracket_aspect_impl,
-    doc = """Aspect.
-
-Sometimes, we want a code block like
-```starlark
-foo = "<brackets>"
-```
-which includes angle brackets.
-""",
+    doc = "Aspect with <brackets>",
     attr_aspects = ["deps"],
     attrs = {
         "brackets": attr.string(
-            doc = "Attribute with \\<brackets>",
+            doc = "Attribute with <brackets>",
             default = "<default>",
         ),
     },

@@ -17,8 +17,8 @@ Stores information about a foo.
 
 | Name  | Description |
 | :------------- | :------------- |
-| <a id="MyFooInfo-bar"></a>bar |  -    |
-| <a id="MyFooInfo-baz"></a>baz |  -    |
+| <a id="MyFooInfo-bar"></a>bar |  (Undocumented)    |
+| <a id="MyFooInfo-baz"></a>baz |  (Undocumented)    |
 
 
 <a id="MyPoorlyDocumentedInfo"></a>
@@ -43,16 +43,17 @@ MyPoorlyDocumentedInfo()
 MyVeryDocumentedInfo(<a href="#MyVeryDocumentedInfo-favorite_food">favorite_food</a>, <a href="#MyVeryDocumentedInfo-favorite_color">favorite_color</a>)
 </pre>
 
-A provider with some really neat documentation.
 
+A provider with some really neat documentation.
 Look on my works, ye mighty, and despair!
+
 
 **FIELDS**
 
 
 | Name  | Description |
 | :------------- | :------------- |
-| <a id="MyVeryDocumentedInfo-favorite_food"></a>favorite_food |  A string representing my favorite food<br><br>Expected to be delicious.    |
+| <a id="MyVeryDocumentedInfo-favorite_food"></a>favorite_food |  A string representing my favorite food    |
 | <a id="MyVeryDocumentedInfo-favorite_color"></a>favorite_color |  A string representing my favorite color    |
 
 
