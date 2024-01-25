@@ -1,15 +1,18 @@
-load(":stardoc_test.bzl", "self_gen_test", "stardoc_test")
-load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
-
-package(default_applicable_licenses = ["//:license"])
+load(":stardoc_test.bzl", "stardoc_test")
 
 licenses(["notice"])  # Apache 2.0
 
-self_gen_test(
+sh_test(
     name = "stardoc_self_gen_test",
-    golden_file = "//stardoc:stardoc_doc.md",
-    require_starlark_doc_extract = True,
-    stardoc_doc = "//:stardoc_rule_doc",
+    srcs = ["diff_test_runner.sh"],
+    args = [
+        "$(location //stardoc:stardoc_doc.md)",
+        "$(location //:stardoc_rule_doc)",
+    ],
+    data = [
+        "//:stardoc_rule_doc",
+        "//stardoc:stardoc_doc.md",
+    ],
 )
 
 exports_files(["testdata/fakedeps/dep.bzl"])
@@ -29,15 +32,13 @@ stardoc_test(
     name = "angle_bracket_test",
     golden_file = "testdata/angle_bracket_test/golden.md",
     input_file = "testdata/angle_bracket_test/input.bzl",
-    legacy_golden_file = "testdata/angle_bracket_test/legacy_golden.md",
 )
 
 stardoc_test(
     name = "proto_format_test",
     format = "proto",
-    golden_file = "testdata/proto_format_test/golden.binaryproto",
+    golden_file = "testdata/proto_format_test/golden.raw",
     input_file = "testdata/proto_format_test/input.bzl",
-    legacy_golden_file = "testdata/proto_format_test/legacy_golden.binaryproto",
 )
 
 stardoc_test(
@@ -57,14 +58,6 @@ stardoc_test(
     name = "repo_rules_test",
     golden_file = "testdata/repo_rules_test/golden.md",
     input_file = "testdata/repo_rules_test/input.bzl",
-    legacy_golden_file = "testdata/repo_rules_test/legacy_golden.md",
-)
-
-stardoc_test(
-    name = "module_extension_test",
-    golden_file = "testdata/module_extension_test/golden.md",
-    input_file = "testdata/module_extension_test/input.bzl",
-    test_legacy_extractor = False,
 )
 
 stardoc_test(
@@ -134,14 +127,12 @@ stardoc_test(
     name = "misc_apis_test",
     golden_file = "testdata/misc_apis_test/golden.md",
     input_file = "testdata/misc_apis_test/input.bzl",
-    legacy_golden_file = "testdata/misc_apis_test/legacy_golden.md",
 )
 
 stardoc_test(
     name = "attribute_types_test",
     golden_file = "testdata/attribute_types_test/golden.md",
     input_file = "testdata/attribute_types_test/input.bzl",
-    legacy_golden_file = "testdata/attribute_types_test/legacy_golden.md",
     symbol_names = ["my_rule"],
 )
 
@@ -151,7 +142,7 @@ stardoc_test(
     input_file = "testdata/filter_rules_test/input.bzl",
     symbol_names = [
         "my_rule",
-        "allowlisted_dep_rule",
+        "whitelisted_dep_rule",
     ],
     deps = [
         "testdata/filter_rules_test/dep.bzl",
@@ -162,7 +153,6 @@ stardoc_test(
     name = "provider_basic_test",
     golden_file = "testdata/provider_basic_test/golden.md",
     input_file = "testdata/provider_basic_test/input.bzl",
-    legacy_golden_file = "testdata/provider_basic_test/legacy_golden.md",
 )
 
 stardoc_test(
@@ -172,20 +162,13 @@ stardoc_test(
 )
 
 stardoc_test(
-    name = "function_wrap_multiple_lines_test",
-    golden_file = "testdata/function_wrap_multiple_lines_test/golden.md",
-    input_file = "testdata/function_wrap_multiple_lines_test/input.bzl",
-    legacy_golden_file = "testdata/function_wrap_multiple_lines_test/legacy_golden.md",
-)
-
-stardoc_test(
     name = "namespace_test",
     golden_file = "testdata/namespace_test/golden.md",
     input_file = "testdata/namespace_test/input.bzl",
 )
 
 stardoc_test(
-    name = "namespace_test_with_allowlist",
+    name = "namespace_test_with_whitelist",
     golden_file = "testdata/namespace_test/golden.md",
     input_file = "testdata/namespace_test/input.bzl",
     symbol_names = [
@@ -200,9 +183,9 @@ stardoc_test(
 )
 
 stardoc_test(
-    name = "multi_level_namespace_test_with_allowlist",
-    golden_file = "testdata/multi_level_namespace_test_with_allowlist/golden.md",
-    input_file = "testdata/multi_level_namespace_test_with_allowlist/input.bzl",
+    name = "multi_level_namespace_test_with_whitelist",
+    golden_file = "testdata/multi_level_namespace_test_with_whitelist/golden.md",
+    input_file = "testdata/multi_level_namespace_test_with_whitelist/input.bzl",
     symbol_names = [
         "my_namespace",
         "other_namespace.foo.nothing",
@@ -213,12 +196,6 @@ stardoc_test(
     name = "macro_kwargs_test",
     golden_file = "testdata/macro_kwargs_test/golden.md",
     input_file = "testdata/macro_kwargs_test/input.bzl",
-)
-
-stardoc_test(
-    name = "pure_markdown_template_test",
-    golden_file = "testdata/pure_markdown_template_test/golden.md",
-    input_file = "testdata/pure_markdown_template_test/input.bzl",
 )
 
 stardoc_test(
@@ -238,7 +215,6 @@ stardoc_test(
     name = "aspect_test",
     golden_file = "testdata/aspect_test/golden.md",
     input_file = "testdata/aspect_test/input.bzl",
-    legacy_golden_file = "testdata/aspect_test/legacy_golden.md",
 )
 
 stardoc_test(
@@ -261,13 +237,28 @@ stardoc_test(
     name = "attribute_defaults_test",
     golden_file = "testdata/attribute_defaults_test/golden.md",
     input_file = "testdata/attribute_defaults_test/input.bzl",
-    legacy_golden_file = "testdata/attribute_defaults_test/legacy_golden.md",
 )
 
 stardoc_test(
     name = "config_apis_test",
     golden_file = "testdata/config_apis_test/golden.md",
     input_file = "testdata/config_apis_test/input.bzl",
+)
+
+genrule(
+    name = "generate_bzl_test_dep",
+    srcs = ["testdata/generated_bzl_test/dep.bzl.tpl"],
+    outs = ["testdata/generated_bzl_test/dep.bzl"],
+    cmd = "cp $< $@",
+)
+
+stardoc_test(
+    name = "generated_bzl_test",
+    golden_file = "testdata/generated_bzl_test/golden.md",
+    input_file = "testdata/generated_bzl_test/input.bzl",
+    deps = [
+        "testdata/generated_bzl_test/dep.bzl",
+    ],
 )
 
 sh_test(
@@ -281,52 +272,4 @@ sh_test(
         "@local_repository_test//:golden.md",
         "@local_repository_test//:output.md",
     ],
-)
-
-# Consistency tests for WORKSPACE-related .bzl files vs. MODULE.bazel
-
-genrule(
-    name = "stardoc_maven_artifacts_in_deps_bzl",
-    srcs = ["//:deps.bzl"],
-    outs = ["stardoc_maven_artifacts_in_deps_bzl.txt"],
-    # Remove all lines except those from 'STARDOC_MAVEN_ARTIFACTS = [' to next ']'
-    cmd = "sed -e '/STARDOC_MAVEN_ARTIFACTS = \\[/,/\\]/!d' $< >$@",
-)
-
-genrule(
-    name = "stardoc_maven_artifacts_in_module_bazel",
-    srcs = ["//:MODULE.bazel"],
-    outs = ["stardoc_maven_artifacts_in_module_bazel.txt"],
-    # Remove all lines except those from 'STARDOC_MAVEN_ARTIFACTS = [' to next ']'
-    cmd = "sed -e '/STARDOC_MAVEN_ARTIFACTS = \\[/,/\\]/!d' $< >$@",
-)
-
-diff_test(
-    name = "stardoc_maven_artifacts_consistency_test",
-    failure_message = "STARDOC_MAVEN_ARTIFACTS in deps.bzl and MODULE.bazel are inconsistent",
-    file1 = "stardoc_maven_artifacts_in_deps_bzl",
-    file2 = "stardoc_maven_artifacts_in_module_bazel",
-)
-
-genrule(
-    name = "stardoc_version_in_version_bzl",
-    srcs = ["//:version.bzl"],
-    outs = ["stardoc_version_in_version_bzl.txt"],
-    # Find first line starting containing 'version = ' and extract the string value
-    cmd = "grep -m 1 'version = ' $< | sed -e 's/.*version = \\(\".*\"\\).*/\\1/' >$@",
-)
-
-genrule(
-    name = "stardoc_version_in_module_bazel",
-    srcs = ["//:MODULE.bazel"],
-    outs = ["stardoc_version_in_module_bazel.txt"],
-    # Find first line starting containing 'version = ' and extract the string value
-    cmd = "grep -m 1 'version = ' $< | sed -e 's/.*version = \\(\".*\"\\).*/\\1/' >$@",
-)
-
-diff_test(
-    name = "stardoc_version_consistency_test",
-    failure_message = "version in version.bzl and MODULE.bazel is inconsistent",
-    file1 = "stardoc_version_in_version_bzl",
-    file2 = "stardoc_version_in_module_bazel",
 )
